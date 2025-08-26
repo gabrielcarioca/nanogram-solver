@@ -2,6 +2,44 @@ from typing import List, Optional
 
 from nanogram.dto import NonogramPuzzle
 from nanogram.strategies.overlap import apply_overlap_pass
+from nanogram.strategies.possibilities import deduce_from_possibilities
+from nanogram.validator import is_puzzle_solved
+
+
+def apply_possibility_pass(puzzle: NonogramPuzzle, grid: List[List[int]]) -> bool:
+    """
+    For each row/column, enumerate consistent patterns and intersect them.
+    Marks must-fill (1) and must-empty (0). Returns True if anything changed.
+    """
+    changed = False
+
+    # Rows
+    for r in range(puzzle.size):
+        known = grid[r]
+        mf, me = deduce_from_possibilities(puzzle.size, puzzle.rows[r], known)
+        for c in mf:
+            if grid[r][c] != 1:
+                grid[r][c] = 1
+                changed = True
+        for c in me:
+            if grid[r][c] != 0:
+                grid[r][c] = 0
+                changed = True
+    
+    # Columns
+    for c in range(puzzle.size):
+        known = [grid[i][c] for i in range(puzzle.size)]
+        mf, me = deduce_from_possibilities(puzzle.size, puzzle.cols[c], known)
+        for i in mf:
+            if grid[i][c] != 1:
+                grid[i][c] = 1
+                changed = True
+        for i in me:
+            if grid[i][c] != 0:
+                grid[i][c] = 0
+                changed = True
+    
+    return changed
 
 
 def solve_nonogram(puzzle: NonogramPuzzle) -> Optional[List[List[int]]]:
@@ -25,8 +63,19 @@ def solve_nonogram(puzzle: NonogramPuzzle) -> Optional[List[List[int]]]:
       backtracking if needed.
     """
     # Working grid: -1 unknown, 0 empty, 1 filled
-    grid = [[-1] * puzzle.size for _ in range(puzzle.size)]
+    state = [[-1] * puzzle.size for _ in range(puzzle.size)]
 
-    changed = apply_overlap_pass(puzzle, grid)
+    changed = True
+    while changed:
+        if is_puzzle_solved(puzzle, state):
+            break
 
-    return grid
+        changed = False
+        if apply_overlap_pass(puzzle, state):
+            changed = True
+        if apply_possibility_pass(puzzle, state):
+            changed = True
+    
+    print(f"Puzzle solved: {is_puzzle_solved(puzzle, state)}")
+
+    return state

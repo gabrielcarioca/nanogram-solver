@@ -1,5 +1,6 @@
 from typing import List
 
+
 def print_grid(grid: List[List[int]]) -> None:
     """
     Print the grid using:

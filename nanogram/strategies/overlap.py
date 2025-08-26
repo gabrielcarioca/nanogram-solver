@@ -78,6 +78,7 @@ def overlap_fill_line(length: int, runs: List[int]) -> List[int]:
 
     return sorted(set(forced))
 
+
 def apply_overlap_pass(puzzle: NonogramPuzzle, grid: List[List[int]]) -> bool:
     """
     Apply one global "overlap/core fill" pass to all rows and columns.
