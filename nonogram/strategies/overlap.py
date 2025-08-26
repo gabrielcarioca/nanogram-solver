@@ -2,7 +2,7 @@
 
 from typing import List
 
-from nanogram.dto import NonogramPuzzle
+from nonogram.dto import NonogramPuzzle
 
 
 def overlap_fill_line(length: int, runs: List[int]) -> List[int]:

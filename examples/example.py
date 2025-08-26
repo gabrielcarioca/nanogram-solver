@@ -1,5 +1,5 @@
-from nanogram.dto import NonogramPuzzle
-from nanogram import print_grid, solve_nonogram
+from nonogram.dto import NonogramPuzzle
+from nonogram import print_grid, solve_nonogram
 
 PUZZLE = NonogramPuzzle(
     size=20,

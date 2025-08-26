@@ -1,9 +1,9 @@
 from typing import List, Optional
 
-from nanogram.dto import NonogramPuzzle
-from nanogram.strategies.overlap import apply_overlap_pass
-from nanogram.strategies.possibilities import deduce_from_possibilities
-from nanogram.validator import is_puzzle_solved
+from nonogram.dto import NonogramPuzzle
+from nonogram.strategies.overlap import apply_overlap_pass
+from nonogram.strategies.possibilities import deduce_from_possibilities
+from nonogram.validator import is_puzzle_solved
 
 
 def apply_possibility_pass(puzzle: NonogramPuzzle, grid: List[List[int]]) -> bool:
